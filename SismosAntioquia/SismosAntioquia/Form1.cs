@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace SismosAntioquia
 {
@@ -101,14 +103,18 @@ namespace SismosAntioquia
             {
                 try
                 {
+                    Coordenada coordenadaRegion = ObtieneCoordenadaReal(
+                        txtLatitud.Text,
+                        txtLongitud.Text);
+
                     Sismo unSismo = new Sismo(
                         idRegion,                                               //Region
                         dtpFecha.Value.ToString("dd/MM/yyyy"),                  //Fecha
                         dtpHora.Value.ToString("HH:mm:ss"),                     //Hora
                         Math.Round(double.Parse(txtMagnitud.Text), 2),          //Magnitud
                         Math.Round(double.Parse(txtProfundidad.Text), 2),       //Profundidad
-                        Math.Round(double.Parse(txtLatitud.Text), 3),           //Latitud
-                        Math.Round(double.Parse(txtLongitud.Text), 3)           //Longitud
+                        coordenadaRegion.Latitud,                               //Latitud
+                        coordenadaRegion.Longitud                               //Longitud
                     ); 
 
                     AccesoDatos.GuardarSismo(unSismo);
@@ -228,15 +234,23 @@ namespace SismosAntioquia
                         comboBoxRegionesEditar.DisplayMember = "region";
                         comboBoxRegionesEditar.Text = AccesoDatos.ObtieneNombreRegion(sismoBuscado.Id_Region);
 
+                        etiquetaIdSismo.Text = txtIdSismoEditar.Text;
                         txtMagnitudEditar.Text = sismoBuscado.Magnitud.ToString();
                         txtProfundidadEditar.Text = sismoBuscado.Profundidad.ToString();
-                        txtLatitudEditar.Text = sismoBuscado.Latitud.ToString();
-                        txtLongitudEditar.Text = sismoBuscado.Longitud.ToString();
+
+                        Coordenada coordenadaRegion = new Coordenada(sismoBuscado.Latitud,
+                            sismoBuscado.Longitud);
+
+                        txtLatitudEditar.Text = coordenadaRegion.LatitudGMS.ToString();
+                        txtLongitudEditar.Text = coordenadaRegion.LongitudGMS.ToString();
+
                         selectorFechaEditar.Value = ObtieneFechaHora(sismoBuscado.Fecha, "fecha");
                         selectorHoraEditar.Value = ObtieneFechaHora(sismoBuscado.Hora, "hora");
 
                         // Bloqueamos el campo de Id Sismo para evitar ediciones no controladas
                         txtIdSismoEditar.Enabled = false;
+                        txtIdSismoEditar.Text = "";
+                        botonBuscarSismo.Enabled = false;
                     }
                     else
                     {
@@ -279,17 +293,21 @@ namespace SismosAntioquia
             {
                 try
                 {
+                    Coordenada coordenadaRegion = ObtieneCoordenadaReal(
+                        txtLatitudEditar.Text,
+                        txtLongitudEditar.Text);
+
                     Sismo unSismo = new Sismo(
                     idRegion,                                                   //Region
                     selectorFechaEditar.Value.ToString("dd/MM/yyyy"),           //Fecha
                     selectorHoraEditar.Value.ToString("HH:mm:ss"),              //Hora
                     Math.Round(double.Parse(txtMagnitudEditar.Text), 2),        //Magnitud
                     Math.Round(double.Parse(txtProfundidadEditar.Text), 2),     //Profundidad
-                    Math.Round(double.Parse(txtLatitudEditar.Text), 3),         //Latitud
-                    Math.Round(double.Parse(txtLongitudEditar.Text), 3)         //Longitud
+                    coordenadaRegion.Latitud,                                   //Latitud
+                    coordenadaRegion.Longitud                                   //Longitud
                     );
 
-                    unSismo.Id = int.Parse(txtIdSismoEditar.Text);
+                    unSismo.Id = int.Parse(etiquetaIdSismo.Text);
 
                     AccesoDatos.ActualizarSismo(unSismo);
 
@@ -323,6 +341,7 @@ namespace SismosAntioquia
 
             txtIdSismoEditar.Text = "";
             txtIdSismoEditar.Enabled = true;
+            botonBuscarSismo.Enabled = true;
         }
 
         /// <summary>
@@ -339,8 +358,9 @@ namespace SismosAntioquia
 
             if (latitud != 0 && longitud != 0)
             {
-                txtLatitud.Text = latitud.ToString();
-                txtLongitud.Text = longitud.ToString();
+                Coordenada coordenadaRegion = new Coordenada(latitud,longitud);
+                txtLatitud.Text = coordenadaRegion.LatitudGMS.ToString();
+                txtLongitud.Text = coordenadaRegion.LongitudGMS.ToString();
             }
         }
         
@@ -392,6 +412,154 @@ namespace SismosAntioquia
             }
 
             return resultado;
+        }
+
+        private void botonCancelarEdicion_Click(object sender, EventArgs e)
+        {
+            //Ocultamos el grupo de controles de edición
+            grupoEditarSismo.Visible = false;
+
+            txtIdSismoEditar.Text = "";
+            txtIdSismoEditar.Enabled = true;
+            botonBuscarSismo.Enabled = true;
+        }
+
+        /// <summary>
+        /// Valida que los datos ingresados por el usuario correspondan a un objeto Coordenada
+        /// </summary>
+        /// <param name="latitudGMS"></param>
+        /// <param name="longitudGMS"></param>
+        /// <returns></returns>
+        private bool ValidaDatosGMS(string[] latitudGMS, string[] longitudGMS)
+        {
+            bool esLatitudOk = false, esLongitudOk = false;
+            double grados, minutos, segundos;
+
+            //Aqui validamos si la latitud es correcta
+            try
+            {
+                grados = double.Parse(latitudGMS[0]);
+                minutos = double.Parse(latitudGMS[1]);
+                segundos = double.Parse(latitudGMS[2]);
+
+                if (latitudGMS[3] == "N" || latitudGMS[3] == "S")
+                    esLatitudOk = true;
+            }
+            catch (FormatException elError)
+            {
+                MessageBox.Show("El dato de latitud no se puede convertir a una coordenada. Intenta nuevamente. " +
+                    $"{elError.Message}",
+                    "Error en tipo de datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //Aqui validamos si la longitud es correcta
+            try
+            {
+                grados = double.Parse(longitudGMS[0]);
+                minutos = double.Parse(longitudGMS[1]);
+                segundos = double.Parse(longitudGMS[2]);
+
+                if (longitudGMS[3] == "W" || longitudGMS[3] == "E")
+                    esLongitudOk = true;
+            }
+            catch (FormatException elError)
+            {
+                MessageBox.Show("El dato de longitud no se puede convertir a una coordenada. Intenta nuevamente. " +
+                    $"{elError.Message}",
+                    "Error en tipo de datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+            if (esLatitudOk && esLongitudOk)
+                return true;
+            else
+                return false;
+        }
+
+        private Coordenada ObtieneCoordenadaReal(string valorLatitudGMS, string valorLongitudGMS)
+        {
+            Coordenada coordenadaResultado = new Coordenada(0, 0);
+            
+            char[] separador = { ' ' };
+            string[] latitudGMS = valorLatitudGMS.Split(separador);
+            string[] longitudGMS = valorLongitudGMS.Split(separador);
+
+            bool datosCorrectos = ValidaDatosGMS(latitudGMS, longitudGMS);
+
+            if (datosCorrectos)
+            {
+                coordenadaResultado = new Coordenada(
+                    new PuntoGMS
+                    {
+                        Grados = double.Parse(latitudGMS[0]),
+                        Minutos = double.Parse(latitudGMS[1]),
+                        Segundos = double.Parse(latitudGMS[2]),
+                        Orientacion = latitudGMS[3],
+                        Tipo = TipoPunto.Lat
+                    },
+                    new PuntoGMS
+                    {
+                        Grados = double.Parse(longitudGMS[0]),
+                        Minutos = double.Parse(longitudGMS[1]),
+                        Segundos = double.Parse(longitudGMS[2]),
+                        Orientacion = longitudGMS[3],
+                        Tipo = TipoPunto.Lon
+                    }
+                );
+            }
+
+            return coordenadaResultado;
+       }
+
+        private void botonGeneraDetalleSismo_Click(object sender, EventArgs e)
+        {
+            if (txtIdSismoDetalle.Text != "")
+            {
+                try
+                {
+                    int idSismo = int.Parse(txtIdSismoDetalle.Text);
+                    Sismo sismoBuscado = AccesoDatos.ObtenerSismo(idSismo);
+
+                    // Si el Sismo viene con el valor predeterminado, no se encontró registro
+                    // de lo contrario, vendrá con un valor de id diferente de cero
+                    if (sismoBuscado.Id != 0)
+                    {
+                        //Aqui visualizamos la información en formato texto plano sin estructura
+                        txtSismoInfo.Text = sismoBuscado.ToString();
+
+                        //Aqui visualizamos la información en formato JSON
+                        txtSismoJson.Text = JsonConvert.SerializeObject(sismoBuscado);
+
+                        //Aqui Visualizamos la información en formato XML
+
+                        var stringwriter = new System.IO.StringWriter();
+                        var serializadorXML = new XmlSerializer(sismoBuscado.GetType());
+                        serializadorXML.Serialize(stringwriter, sismoBuscado);
+
+                        txtSismoXML.Text = stringwriter.ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se encontró un sismo asociado al id suministrado.",
+                            "Registro no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        txtIdSismoEditar.Text = "";
+                    }
+                }
+                catch (FormatException error)
+                {
+                    MessageBox.Show("El Id del sismo debe ser un valor numérico entero \n" +
+                        error.Message,
+                        "Error en datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    txtIdSismoDetalle.Text = "";
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor ingrese el ID del sismo a editar",
+                    "Id de Sismo no suministrado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

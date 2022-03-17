@@ -1,4 +1,6 @@
-﻿namespace SismosAntioquia
+﻿using System;
+
+namespace SismosAntioquia
 {
     public class Sismo
     {
@@ -35,6 +37,23 @@
             Profundidad = 0f;
             Latitud = 0f;
             Longitud = 0f;
+        }
+
+        public override string ToString()
+        {
+            string nombreRegion = AccesoDatos.ObtieneNombreRegion(Id_Region);
+            Coordenada coordenadaRegion = new Coordenada(Latitud, Longitud);
+
+            return string.Format(
+                $"Id: {Id} " + Environment.NewLine +
+                $"Region: {nombreRegion} " + Environment.NewLine +
+                $"Fecha: {Fecha} " + Environment.NewLine +
+                $"Hora: {Hora} " + Environment.NewLine +
+                $"Magnitud: {Magnitud.ToString()} " + Environment.NewLine +
+                $"Profundidad: {Profundidad.ToString()} " + Environment.NewLine +
+                $"Latiud: {coordenadaRegion.LatitudGMS.ToString()} " + Environment.NewLine +
+                $"Longitud: {coordenadaRegion.LongitudGMS.ToString()} "
+                );
         }
     }
 }
