@@ -36,6 +36,16 @@
             this.dataGridViewConsolidadoRegion = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dataGridViewSismosMes = new System.Windows.Forms.DataGridView();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.label23 = new System.Windows.Forms.Label();
+            this.txtSismoJson = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtSismoXML = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.txtSismoInfo = new System.Windows.Forms.TextBox();
+            this.txtIdSismoDetalle = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.botonGeneraDetalleSismo = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
@@ -58,6 +68,9 @@
             this.label17 = new System.Windows.Forms.Label();
             this.botonBuscarSismo = new System.Windows.Forms.Button();
             this.grupoEditarSismo = new System.Windows.Forms.GroupBox();
+            this.etiquetaIdSismo = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.botonCancelarEdicion = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.selectorHoraEditar = new System.Windows.Forms.DateTimePicker();
@@ -78,19 +91,6 @@
             this.txtIdSismoBorrar = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.botonCancelarEdicion = new System.Windows.Forms.Button();
-            this.label19 = new System.Windows.Forms.Label();
-            this.etiquetaIdSismo = new System.Windows.Forms.Label();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.txtIdSismoDetalle = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.botonGeneraDetalleSismo = new System.Windows.Forms.Button();
-            this.txtSismoInfo = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.txtSismoXML = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.txtSismoJson = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDetalleSismo)).BeginInit();
             this.tabControl3.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -98,12 +98,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConsolidadoRegion)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSismosMes)).BeginInit();
+            this.tabPage7.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.grupoEditarSismo.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.tabPage7.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewDetalleSismo
@@ -193,6 +193,105 @@
             this.dataGridViewSismosMes.ReadOnly = true;
             this.dataGridViewSismosMes.Size = new System.Drawing.Size(426, 397);
             this.dataGridViewSismosMes.TabIndex = 0;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.label23);
+            this.tabPage7.Controls.Add(this.txtSismoJson);
+            this.tabPage7.Controls.Add(this.label22);
+            this.tabPage7.Controls.Add(this.txtSismoXML);
+            this.tabPage7.Controls.Add(this.label21);
+            this.tabPage7.Controls.Add(this.txtSismoInfo);
+            this.tabPage7.Controls.Add(this.txtIdSismoDetalle);
+            this.tabPage7.Controls.Add(this.label20);
+            this.tabPage7.Controls.Add(this.botonGeneraDetalleSismo);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(521, 410);
+            this.tabPage7.TabIndex = 3;
+            this.tabPage7.Text = "Detalle del Sismo";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(35, 298);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(120, 13);
+            this.label23.TabIndex = 31;
+            this.label23.Text = "Detalle Sismo en JSON:";
+            // 
+            // txtSismoJson
+            // 
+            this.txtSismoJson.Location = new System.Drawing.Point(38, 317);
+            this.txtSismoJson.Multiline = true;
+            this.txtSismoJson.Name = "txtSismoJson";
+            this.txtSismoJson.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtSismoJson.Size = new System.Drawing.Size(460, 69);
+            this.txtSismoJson.TabIndex = 30;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(35, 192);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(114, 13);
+            this.label22.TabIndex = 29;
+            this.label22.Text = "Detalle Sismo en XML:";
+            // 
+            // txtSismoXML
+            // 
+            this.txtSismoXML.Location = new System.Drawing.Point(38, 211);
+            this.txtSismoXML.Multiline = true;
+            this.txtSismoXML.Name = "txtSismoXML";
+            this.txtSismoXML.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtSismoXML.Size = new System.Drawing.Size(460, 69);
+            this.txtSismoXML.TabIndex = 28;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(35, 76);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(74, 13);
+            this.label21.TabIndex = 27;
+            this.label21.Text = "Detalle Sismo:";
+            // 
+            // txtSismoInfo
+            // 
+            this.txtSismoInfo.Location = new System.Drawing.Point(38, 95);
+            this.txtSismoInfo.Multiline = true;
+            this.txtSismoInfo.Name = "txtSismoInfo";
+            this.txtSismoInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtSismoInfo.Size = new System.Drawing.Size(460, 69);
+            this.txtSismoInfo.TabIndex = 26;
+            // 
+            // txtIdSismoDetalle
+            // 
+            this.txtIdSismoDetalle.Location = new System.Drawing.Point(201, 16);
+            this.txtIdSismoDetalle.Name = "txtIdSismoDetalle";
+            this.txtIdSismoDetalle.Size = new System.Drawing.Size(66, 20);
+            this.txtIdSismoDetalle.TabIndex = 25;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(142, 20);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(48, 13);
+            this.label20.TabIndex = 24;
+            this.label20.Text = "Id sismo:";
+            // 
+            // botonGeneraDetalleSismo
+            // 
+            this.botonGeneraDetalleSismo.Location = new System.Drawing.Point(277, 13);
+            this.botonGeneraDetalleSismo.Name = "botonGeneraDetalleSismo";
+            this.botonGeneraDetalleSismo.Size = new System.Drawing.Size(75, 23);
+            this.botonGeneraDetalleSismo.TabIndex = 23;
+            this.botonGeneraDetalleSismo.Text = "Buscar";
+            this.botonGeneraDetalleSismo.UseVisualStyleBackColor = true;
+            this.botonGeneraDetalleSismo.Click += new System.EventHandler(this.botonGeneraDetalleSismo_Click);
             // 
             // tabControl2
             // 
@@ -426,6 +525,35 @@
             this.grupoEditarSismo.Text = "Editar Sismo:";
             this.grupoEditarSismo.Visible = false;
             // 
+            // etiquetaIdSismo
+            // 
+            this.etiquetaIdSismo.BackColor = System.Drawing.Color.LightGray;
+            this.etiquetaIdSismo.Location = new System.Drawing.Point(78, 20);
+            this.etiquetaIdSismo.Name = "etiquetaIdSismo";
+            this.etiquetaIdSismo.Size = new System.Drawing.Size(83, 20);
+            this.etiquetaIdSismo.TabIndex = 34;
+            this.etiquetaIdSismo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(20, 24);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(50, 13);
+            this.label19.TabIndex = 33;
+            this.label19.Text = "Id Sismo:";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // botonCancelarEdicion
+            // 
+            this.botonCancelarEdicion.Location = new System.Drawing.Point(15, 297);
+            this.botonCancelarEdicion.Name = "botonCancelarEdicion";
+            this.botonCancelarEdicion.Size = new System.Drawing.Size(75, 23);
+            this.botonCancelarEdicion.TabIndex = 32;
+            this.botonCancelarEdicion.Text = "Cancelar";
+            this.botonCancelarEdicion.UseVisualStyleBackColor = true;
+            this.botonCancelarEdicion.Click += new System.EventHandler(this.botonCancelarEdicion_Click);
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -611,134 +739,6 @@
             this.label18.TabIndex = 6;
             this.label18.Text = "Sismos Antioquia 2019 - 2022";
             // 
-            // botonCancelarEdicion
-            // 
-            this.botonCancelarEdicion.Location = new System.Drawing.Point(15, 297);
-            this.botonCancelarEdicion.Name = "botonCancelarEdicion";
-            this.botonCancelarEdicion.Size = new System.Drawing.Size(75, 23);
-            this.botonCancelarEdicion.TabIndex = 32;
-            this.botonCancelarEdicion.Text = "Cancelar";
-            this.botonCancelarEdicion.UseVisualStyleBackColor = true;
-            this.botonCancelarEdicion.Click += new System.EventHandler(this.botonCancelarEdicion_Click);
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(20, 24);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(50, 13);
-            this.label19.TabIndex = 33;
-            this.label19.Text = "Id Sismo:";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // etiquetaIdSismo
-            // 
-            this.etiquetaIdSismo.BackColor = System.Drawing.Color.LightGray;
-            this.etiquetaIdSismo.Location = new System.Drawing.Point(78, 20);
-            this.etiquetaIdSismo.Name = "etiquetaIdSismo";
-            this.etiquetaIdSismo.Size = new System.Drawing.Size(83, 20);
-            this.etiquetaIdSismo.TabIndex = 34;
-            this.etiquetaIdSismo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.label23);
-            this.tabPage7.Controls.Add(this.txtSismoJson);
-            this.tabPage7.Controls.Add(this.label22);
-            this.tabPage7.Controls.Add(this.txtSismoXML);
-            this.tabPage7.Controls.Add(this.label21);
-            this.tabPage7.Controls.Add(this.txtSismoInfo);
-            this.tabPage7.Controls.Add(this.txtIdSismoDetalle);
-            this.tabPage7.Controls.Add(this.label20);
-            this.tabPage7.Controls.Add(this.botonGeneraDetalleSismo);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(521, 410);
-            this.tabPage7.TabIndex = 3;
-            this.tabPage7.Text = "Detalle del Sismo";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // txtIdSismoDetalle
-            // 
-            this.txtIdSismoDetalle.Location = new System.Drawing.Point(201, 16);
-            this.txtIdSismoDetalle.Name = "txtIdSismoDetalle";
-            this.txtIdSismoDetalle.Size = new System.Drawing.Size(66, 20);
-            this.txtIdSismoDetalle.TabIndex = 25;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(142, 20);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(48, 13);
-            this.label20.TabIndex = 24;
-            this.label20.Text = "Id sismo:";
-            // 
-            // botonGeneraDetalleSismo
-            // 
-            this.botonGeneraDetalleSismo.Location = new System.Drawing.Point(277, 13);
-            this.botonGeneraDetalleSismo.Name = "botonGeneraDetalleSismo";
-            this.botonGeneraDetalleSismo.Size = new System.Drawing.Size(75, 23);
-            this.botonGeneraDetalleSismo.TabIndex = 23;
-            this.botonGeneraDetalleSismo.Text = "Buscar";
-            this.botonGeneraDetalleSismo.UseVisualStyleBackColor = true;
-            this.botonGeneraDetalleSismo.Click += new System.EventHandler(this.botonGeneraDetalleSismo_Click);
-            // 
-            // txtSismoInfo
-            // 
-            this.txtSismoInfo.Location = new System.Drawing.Point(38, 95);
-            this.txtSismoInfo.Multiline = true;
-            this.txtSismoInfo.Name = "txtSismoInfo";
-            this.txtSismoInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSismoInfo.Size = new System.Drawing.Size(304, 69);
-            this.txtSismoInfo.TabIndex = 26;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(35, 76);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(74, 13);
-            this.label21.TabIndex = 27;
-            this.label21.Text = "Detalle Sismo:";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(35, 192);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(114, 13);
-            this.label22.TabIndex = 29;
-            this.label22.Text = "Detalle Sismo en XML:";
-            // 
-            // txtSismoXML
-            // 
-            this.txtSismoXML.Location = new System.Drawing.Point(38, 211);
-            this.txtSismoXML.Multiline = true;
-            this.txtSismoXML.Name = "txtSismoXML";
-            this.txtSismoXML.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSismoXML.Size = new System.Drawing.Size(304, 69);
-            this.txtSismoXML.TabIndex = 28;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(35, 298);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(120, 13);
-            this.label23.TabIndex = 31;
-            this.label23.Text = "Detalle Sismo en JSON:";
-            // 
-            // txtSismoJson
-            // 
-            this.txtSismoJson.Location = new System.Drawing.Point(38, 317);
-            this.txtSismoJson.Multiline = true;
-            this.txtSismoJson.Name = "txtSismoJson";
-            this.txtSismoJson.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSismoJson.Size = new System.Drawing.Size(304, 69);
-            this.txtSismoJson.TabIndex = 30;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -749,7 +749,7 @@
             this.Controls.Add(this.tabControl3);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Sismos Antioquia 2019 - 2021";
+            this.Text = "Sismos Antioquia 2019 - 2022";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDetalleSismo)).EndInit();
             this.tabControl3.ResumeLayout(false);
@@ -759,6 +759,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConsolidadoRegion)).EndInit();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSismosMes)).EndInit();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
@@ -768,8 +770,6 @@
             this.grupoEditarSismo.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            this.tabPage7.ResumeLayout(false);
-            this.tabPage7.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

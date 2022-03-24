@@ -36,14 +36,55 @@ namespace SismosAntioquia
         /// </summary>
         public static DataTable ObtenerDetalleSismos()
         {
-            DataTable tablaResultado = new DataTable();
-
             string cadenaConexion = ObtenerCadenaConexion("SismosDB");
 
-            using (SQLiteConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
-                SQLiteDataAdapter daSismos = new SQLiteDataAdapter("select distinct id, region, fecha, hora, latitud, longitud, magnitud, profundidad from v_detalle_sismos", cxnDB);
-                daSismos.Fill(tablaResultado);
+                //Aqui creamos la dataTable de resultados
+                DataTable tablaResultado = new DataTable();
+
+                //Aqui le definimos las columnas que utilizará
+                tablaResultado.Columns.Add(new DataColumn("Id", typeof(int)));
+                tablaResultado.Columns.Add(new DataColumn("Region", typeof(string)));
+                tablaResultado.Columns.Add(new DataColumn("Fecha", typeof(string)));
+                tablaResultado.Columns.Add(new DataColumn("Hora", typeof(string)));
+                tablaResultado.Columns.Add(new DataColumn("Magnitud", typeof(double)));
+                tablaResultado.Columns.Add(new DataColumn("Profundidad", typeof(double)));
+                tablaResultado.Columns.Add(new DataColumn("Latitud", typeof(string)));
+                tablaResultado.Columns.Add(new DataColumn("Longitud", typeof(string)));
+
+                string sentenciaSQL = "select distinct id, region nombre_region, fecha, hora, magnitud, profundidad from v_detalle_sismos";
+                var salida = cxnDB.Query<Sismo>(sentenciaSQL, new DynamicParameters());
+
+                DataRow filaSismo;
+                DynamicParameters parametrosSentencia;
+                string coordenadasSQL;
+                IEnumerable<Coordenada> unaCoordenada;
+
+                foreach (Sismo unSismo in salida)
+                {
+                    //El Id se asigna como parametro de la sentencia, 
+                    parametrosSentencia = new DynamicParameters();
+                    parametrosSentencia.Add("@id", unSismo.Id, DbType.Int32, ParameterDirection.Input);
+
+                    //Aqui buscamos las coordenadas del sismo
+                    coordenadasSQL = "select t.latitud, t.longitud from temblores t where t.id = @id";
+                    unaCoordenada = cxnDB.Query<Coordenada>(coordenadasSQL, parametrosSentencia);
+                    unSismo.Coordenada = unaCoordenada.First();
+
+                    filaSismo = tablaResultado.NewRow();
+
+                    filaSismo["Id"] = unSismo.Id;
+                    filaSismo["Region"] = unSismo.Nombre_Region;
+                    filaSismo["Fecha"] = unSismo.Fecha;
+                    filaSismo["Hora"] = unSismo.Hora;
+                    filaSismo["Magnitud"] = unSismo.Magnitud;
+                    filaSismo["Profundidad"] = unSismo.Profundidad;
+                    filaSismo["Latitud"] = unSismo.Coordenada.LatitudGMS.ToString();
+                    filaSismo["Longitud"] = unSismo.Coordenada.LongitudGMS.ToString();
+
+                    tablaResultado.Rows.Add(filaSismo);
+                }
                 return tablaResultado;
             }
         }
@@ -55,7 +96,6 @@ namespace SismosAntioquia
         public static DataTable ObtenerSismosMes()
         {
             DataTable tablaResultado = new DataTable();
-
             string cadenaConexion = ObtenerCadenaConexion("SismosDB");
 
             using (SQLiteConnection cxnDB = new SQLiteConnection(cadenaConexion))
@@ -122,7 +162,6 @@ namespace SismosAntioquia
                 if (salida.ToArray().Length != 0)
                     resultado = salida.First();
             }
-
             return resultado;
         }
 
@@ -150,7 +189,6 @@ namespace SismosAntioquia
                 if (salida.ToArray().Length != 0)
                     resultado = salida.First();
             }
-
             return resultado;
         }
 
@@ -160,10 +198,10 @@ namespace SismosAntioquia
         /// <param name="nombreRegion">Nombre de la región</param>
         /// <param name="latitud">Componente de latitud de la coordenada</param>
         /// <param name="longitud">Componente de la longitud de la coordenada</param>
-        public static void ObtieneCoordenadasRegion(string nombreRegion, out double latitud, out double longitud)
-        { 
-            latitud = 0;
-            longitud = 0;
+        public static Coordenada ObtieneCoordenadasRegion(string nombreRegion)
+        {
+            double latitud = 0;
+            double longitud = 0;
 
             string cadenaConexion = ObtenerCadenaConexion("SismosDB");
 
@@ -187,6 +225,7 @@ namespace SismosAntioquia
                 if (salidaLongitud.ToArray().Length != 0)
                     longitud = salidaLongitud.First();
 
+                return new Coordenada(latitud, longitud);
             }
         }
 
@@ -217,7 +256,6 @@ namespace SismosAntioquia
                 if (totalRegistros != 0)
                     resultado = true;
             }
-
             return resultado;
         }
 
@@ -229,14 +267,12 @@ namespace SismosAntioquia
         public static Sismo ObtenerSismo(int idSismo)
         {
             Sismo sismoResultado = new Sismo();
-
             string cadenaConexion = ObtenerCadenaConexion("SismosDB");
 
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
-
                 // se define la sentencia SQL a utilizar, pero sin concatenar el id
-                string sentenciaSQL = "select id, fecha, hora, magnitud,profundidad,latitud,longitud,id_region from temblores where id = @id";
+                string sentenciaSQL = "select t.id, t.fecha, t.hora, t.magnitud, t.profundidad, t.id_region, r.nombre nombre_region from temblores t join regiones r on t.id_region = r.id where t.id = @id";
 
                 //El Id se asigna como parametro de la sentencia, 
                 DynamicParameters parametrosSentencia = new DynamicParameters();
@@ -246,8 +282,17 @@ namespace SismosAntioquia
 
                 //validamos cuantos registros devuelve la lista
                 if (salida.ToArray().Length != 0)
+                {
                     sismoResultado = salida.First();
+                    //sismoResultado.Nombre_Region = ObtieneNombreRegion(sismoResultado.Id_Region);
 
+                    //Aqui buscamos las coordenadas del sismo
+                    string coordenadasSQL = "select t.latitud, t.longitud from temblores t where t.id = @id";
+                    var salidaCoordenadas = cxnDB.Query<Coordenada>(coordenadasSQL, parametrosSentencia);
+
+                    if (salidaCoordenadas.ToArray().Length != 0)
+                        sismoResultado.Coordenada = salidaCoordenadas.First();
+                }
                 return sismoResultado;
             }
         }

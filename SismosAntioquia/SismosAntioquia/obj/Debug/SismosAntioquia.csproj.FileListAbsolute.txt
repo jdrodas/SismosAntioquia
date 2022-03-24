@@ -21,3 +21,5 @@ C:\Users\JuanD\source\repos\GitHub_SismosAntioquia\SismosAntioquia\SismosAntioqu
 C:\Users\JuanD\source\repos\GitHub_SismosAntioquia\SismosAntioquia\SismosAntioquia\obj\Debug\SismosAntioquia.csproj.CopyComplete
 C:\Users\JuanD\source\repos\GitHub_SismosAntioquia\SismosAntioquia\SismosAntioquia\obj\Debug\SismosAntioquia.exe
 C:\Users\JuanD\source\repos\GitHub_SismosAntioquia\SismosAntioquia\SismosAntioquia\obj\Debug\SismosAntioquia.pdb
+C:\Users\JuanD\source\repos\GitHub_SismosAntioquia\SismosAntioquia\SismosAntioquia\bin\Debug\Newtonsoft.Json.dll
+C:\Users\JuanD\source\repos\GitHub_SismosAntioquia\SismosAntioquia\SismosAntioquia\bin\Debug\Newtonsoft.Json.xml
